@@ -1,0 +1,16 @@
+{
+  "name": "PULS",
+  "short_name": "PULS",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3eee7",
+  "theme_color": "#f3eee7",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
