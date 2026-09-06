@@ -11,7 +11,7 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "PULS",
   description:
-    "Täglicher Check-in. Wenn du zwei Tage still bist, benachrichtigt PULS deinen Notfallkontakt.",
+    "A daily check-in. If you go silent for two days, PULS notifies your emergency contact.",
   applicationName: "PULS",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -29,12 +29,11 @@ export const viewport: Viewport = {
   themeColor: "#f3eee7",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="de" className={`${outfit.variable} h-full antialiased`}>
+    <html lang="en" className={`${outfit.variable} h-full antialiased`}>
       <body className="min-h-full bg-[#f3eee7] font-sans text-stone-800">
         {children}
         <Analytics />
