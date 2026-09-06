@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState, useSyncExternalStore } from 
 import { CheckInButton } from "@/components/CheckInButton";
 import { EditableField } from "@/components/EditableField";
 import { LanguageMenu } from "@/components/LanguageMenu";
+import { trackAppOpen, trackCheckIn } from "@/lib/analytics";
 import { syncAlarm } from "@/lib/alarm";
 import { pulseHaptic } from "@/lib/haptics";
 import { t, type Locale } from "@/lib/i18n";
@@ -54,6 +55,10 @@ export function PulsApp() {
     document.documentElement.lang = state.locale;
     if (didLoad) saveState(state);
   }, [state, didLoad]);
+
+  useEffect(() => {
+    if (didLoad) trackAppOpen();
+  }, [didLoad]);
 
   const ready = useMemo(() => Boolean(state && isValidProfile(state)), [state]);
 
@@ -132,6 +137,7 @@ export function PulsApp() {
   async function handleCheckIn() {
     if (busy || checkedInToday || !ready) return;
     pulseHaptic();
+    trackCheckIn();
     setBusy(true);
     const next: PulsState = {
       ...state,
