@@ -20,13 +20,19 @@ export default function LandingPage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-6 pb-20 sm:px-10 sm:pb-24 lg:px-16 lg:pb-32">
-        <section className="pt-12 sm:pt-16 lg:pt-24">
+        <section className="flex min-h-[70dvh] flex-col justify-center pt-16 sm:min-h-[75dvh] sm:pt-20 lg:min-h-[80dvh] lg:pt-24">
+          <h1 className="max-w-4xl text-[2.35rem] font-medium leading-[1.12] tracking-[-0.04em] text-stone-800 sm:text-6xl sm:leading-[1.08] lg:text-7xl">
+            Do you care about your loved ones?
+          </h1>
+        </section>
+
+        <section className="border-t border-stone-300/70 pt-16 sm:pt-20 lg:pt-24">
           <p className="text-xs font-medium tracking-[0.18em] text-[#006039] uppercase">
             The problem
           </p>
-          <h1 className="mt-4 max-w-3xl text-[2rem] font-medium leading-[1.15] tracking-[-0.04em] text-stone-800 sm:text-5xl sm:leading-[1.12] lg:text-[3.5rem]">
+          <h2 className="mt-4 max-w-3xl text-[2rem] font-medium leading-[1.15] tracking-[-0.04em] text-stone-800 sm:text-5xl sm:leading-[1.12] lg:text-[3.5rem]">
             Millions of people live alone. If something happens, nobody may notice in time.
-          </h1>
+          </h2>
 
           <div className="mt-10 grid gap-8 sm:mt-14 sm:grid-cols-2 sm:gap-12 lg:gap-20">
             <p className="flex flex-col gap-2">
