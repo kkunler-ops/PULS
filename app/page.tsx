@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { SiteHeader } from "@/components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "PULS",
@@ -13,11 +14,7 @@ const ctaClassName =
 export default function LandingPage() {
   return (
     <div className="min-h-dvh">
-      <header className="px-6 pt-7 sm:px-10 sm:pt-9 lg:px-16 lg:pt-12">
-        <p className="mx-auto max-w-5xl text-sm font-medium tracking-[0.22em] text-[#006039]">
-          PULS
-        </p>
-      </header>
+      <SiteHeader />
 
       <main className="mx-auto max-w-5xl px-6 pb-20 sm:px-10 sm:pb-24 lg:px-16 lg:pb-32">
         <section className="pt-12 sm:pt-16 lg:pt-24">

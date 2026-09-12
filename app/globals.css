@@ -44,3 +44,63 @@ body {
 button {
   cursor: pointer;
 }
+
+.blog-prose p,
+.blog-prose li {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: #57534e;
+}
+
+.blog-prose p + p,
+.blog-prose p + ol,
+.blog-prose p + ul,
+.blog-prose ol + p,
+.blog-prose ul + p,
+.blog-prose h2 + p,
+.blog-prose h2 + ol,
+.blog-prose h2 + ul,
+.blog-prose h3 + p {
+  margin-top: 1.15rem;
+}
+
+.blog-prose h2 {
+  margin-top: 2.75rem;
+  margin-bottom: 0.85rem;
+  font-size: 1.45rem;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: #1c1917;
+}
+
+.blog-prose h3 {
+  margin-top: 2rem;
+  margin-bottom: 0.6rem;
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: #1c1917;
+}
+
+.blog-prose ol,
+.blog-prose ul {
+  margin-top: 1rem;
+  padding-left: 1.2rem;
+}
+
+.blog-prose ol {
+  list-style: decimal;
+}
+
+.blog-prose ul {
+  list-style: disc;
+}
+
+.blog-prose li + li {
+  margin-top: 0.55rem;
+}
+
+.blog-prose strong {
+  font-weight: 500;
+  color: #44403c;
+}
