@@ -1,6 +1,5 @@
 import Link from "next/link";
-
-const linkClass = "font-medium text-[#006039] underline decoration-[#006039]/25 underline-offset-4 hover:decoration-[#006039]";
+import { blogLinkClass as linkClass } from "@/lib/blog";
 
 export function WhatIsADailyCheckInApp() {
   return (
@@ -256,6 +255,25 @@ export function WhatIsADailyCheckInApp() {
         you want fewer false alarms, pick a longer quiet period — like two missed
         days — and tell your contact that in advance.
       </p>
+
+      <h2>Related</h2>
+      <ul>
+        <li>
+          <Link href="/blog/how-to-check-on-someone-who-lives-alone" className={linkClass}>
+            How to check on someone who lives alone
+          </Link>
+        </li>
+        <li>
+          <Link href="/blog/medical-alert-without-a-wearable" className={linkClass}>
+            Medical alert without a wearable
+          </Link>
+        </li>
+        <li>
+          <Link href="/blog/life-alert-vs-daily-check-in" className={linkClass}>
+            Life Alert vs a daily check-in
+          </Link>
+        </li>
+      </ul>
     </>
   );
 }

@@ -3,10 +3,16 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { JSX } from "react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { HowToCheckOnSomeoneWhoLivesAlone } from "@/content/how-to-check-on-someone-who-lives-alone";
+import { LifeAlertVsDailyCheckIn } from "@/content/life-alert-vs-daily-check-in";
+import { MedicalAlertWithoutAWearable } from "@/content/medical-alert-without-a-wearable";
 import { WhatIsADailyCheckInApp } from "@/content/what-is-a-daily-check-in-app";
 import { getPost, posts } from "@/lib/posts";
 
 const articles: Record<string, () => JSX.Element> = {
+  "how-to-check-on-someone-who-lives-alone": HowToCheckOnSomeoneWhoLivesAlone,
+  "life-alert-vs-daily-check-in": LifeAlertVsDailyCheckIn,
+  "medical-alert-without-a-wearable": MedicalAlertWithoutAWearable,
   "what-is-a-daily-check-in-app": WhatIsADailyCheckInApp,
 };
 
