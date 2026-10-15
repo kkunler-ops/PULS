@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteHeader } from "@/components/SiteHeader";
+import { SiteShell } from "@/components/SiteShell";
 import { posts } from "@/lib/posts";
 
 export const metadata: Metadata = {
@@ -18,8 +18,7 @@ function formatDate(iso: string) {
 
 export default function BlogIndexPage() {
   return (
-    <div className="min-h-dvh">
-      <SiteHeader />
+    <SiteShell>
       <main className="mx-auto max-w-2xl px-6 pb-20 pt-12 sm:px-10 sm:pb-24 sm:pt-16 lg:px-0">
         <p className="text-xs font-medium tracking-[0.18em] text-[#006039] uppercase">
           Blog
@@ -44,6 +43,6 @@ export default function BlogIndexPage() {
           ))}
         </ul>
       </main>
-    </div>
+    </SiteShell>
   );
 }

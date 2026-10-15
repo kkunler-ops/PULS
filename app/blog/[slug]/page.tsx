@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { JSX } from "react";
-import { SiteHeader } from "@/components/SiteHeader";
+import { SiteShell } from "@/components/SiteShell";
 import { HowToCheckOnSomeoneWhoLivesAlone } from "@/content/how-to-check-on-someone-who-lives-alone";
 import { LifeAlertVsDailyCheckIn } from "@/content/life-alert-vs-daily-check-in";
 import { MedicalAlertWithoutAWearable } from "@/content/medical-alert-without-a-wearable";
@@ -52,8 +52,7 @@ export default async function BlogPostPage({
   if (!post || !Article) notFound();
 
   return (
-    <div className="min-h-dvh">
-      <SiteHeader />
+    <SiteShell>
       <article className="mx-auto max-w-2xl px-6 pb-20 pt-12 sm:px-10 sm:pb-24 sm:pt-16 lg:px-0">
         <p className="text-sm text-stone-500">{formatDate(post.date)}</p>
         <h1 className="mt-3 text-[2rem] font-medium leading-[1.15] tracking-[-0.04em] text-stone-800 sm:text-[2.6rem] sm:leading-[1.12]">
@@ -80,6 +79,6 @@ export default async function BlogPostPage({
           .
         </p>
       </article>
-    </div>
+    </SiteShell>
   );
 }

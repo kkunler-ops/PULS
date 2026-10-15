@@ -7,10 +7,16 @@ import { LOCALES, LOCALE_LABELS, type Locale } from "@/lib/i18n";
 type Props = {
   locale: Locale;
   label: string;
+  locales?: readonly Locale[];
   onChange: (locale: Locale) => void;
 };
 
-export function LanguageMenu({ locale, label, onChange }: Props) {
+export function LanguageMenu({
+  locale,
+  label,
+  locales = LOCALES,
+  onChange,
+}: Props) {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState<{ top: number; right: number } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -74,7 +80,7 @@ export function LanguageMenu({ locale, label, onChange }: Props) {
               className="fixed z-[200] max-h-[min(28rem,calc(100dvh-5.5rem))] w-48 overflow-y-auto rounded-2xl border border-stone-200/80 bg-[#fbf8f4] py-2 shadow-[0_16px_40px_rgba(28,25,23,0.18)]"
               style={{ top: pos.top, right: pos.right }}
             >
-              {LOCALES.map((code) => (
+              {locales.map((code) => (
                 <button
                   key={code}
                   type="button"

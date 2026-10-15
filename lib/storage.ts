@@ -59,3 +59,7 @@ export function loadState(): PulsState {
 export function saveState(state: PulsState) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
+
+export function saveLocale(locale: Locale) {
+  saveState({ ...loadState(), locale });
+}
