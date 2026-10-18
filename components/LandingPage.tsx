@@ -11,7 +11,7 @@ export function LandingPage() {
   const { copy, locale } = useSiteLocale();
 
   return (
-    <main className="mx-auto max-w-6xl px-6 pb-20 sm:px-10 sm:pb-24 lg:px-16 lg:pb-32">
+    <main className="mx-auto max-w-5xl px-6 pb-20 sm:px-10 sm:pb-24 lg:px-16 lg:pb-32">
       <section className="pt-12 sm:pt-16 lg:pt-24">
         <p className="text-xs font-medium tracking-[0.18em] text-[#006039] uppercase">
           {copy.problem}

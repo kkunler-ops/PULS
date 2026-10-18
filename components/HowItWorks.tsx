@@ -22,12 +22,7 @@ export function HowItWorks({ copy, locale }: { copy: SiteCopy; locale: Locale })
       </h2>
       <ol className="mt-12 grid gap-14 sm:mt-16 sm:grid-cols-3 sm:gap-8 lg:gap-10">
         {steps.map((step, index) => (
-          <li
-            key={step.screen}
-            className={`flex flex-col items-center text-center ${
-              step.screen === "checkin" ? "sm:pr-14" : ""
-            }`}
-          >
+          <li key={step.screen} className="flex flex-col items-center text-center">
             <p className="text-sm font-medium tracking-[0.16em] text-[#006039]">
               {String(index + 1).padStart(2, "0")}
             </p>
@@ -39,70 +34,40 @@ export function HowItWorks({ copy, locale }: { copy: SiteCopy; locale: Locale })
             </p>
             <div className="mt-8">
               {step.screen === "setup" ? (
-                <SetupPhone copy={copy} locale={locale} />
+                <PhoneFrame>
+                  <AppChrome
+                    locale={locale}
+                    name=""
+                    email=""
+                    buttonLabel={t(locale, "checkIn")}
+                    buttonReady={false}
+                    nameHint={copy.hintName}
+                    emailHint={copy.hintEmail}
+                  />
+                </PhoneFrame>
               ) : null}
               {step.screen === "checkin" ? (
-                <CheckInPhone copy={copy} locale={locale} />
+                <PhoneFrame>
+                  <AppChrome
+                    locale={locale}
+                    name={DEMO_NAME}
+                    email={DEMO_EMAIL}
+                    buttonLabel={t(locale, "checkIn")}
+                    buttonReady={true}
+                    buttonHint={copy.hintButton}
+                  />
+                </PhoneFrame>
               ) : null}
-              {step.screen === "alert" ? <AlertPhone locale={locale} /> : null}
+              {step.screen === "alert" ? (
+                <PhoneFrame>
+                  <AlertScreen locale={locale} />
+                </PhoneFrame>
+              ) : null}
             </div>
           </li>
         ))}
       </ol>
     </div>
-  );
-}
-
-function SetupPhone({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
-  return (
-    <div className="flex flex-col items-center">
-      <Hint label={copy.hintName} arrow="down" />
-      <PhoneFrame>
-        <AppChrome
-          locale={locale}
-          name=""
-          email=""
-          buttonLabel={t(locale, "checkIn")}
-          buttonReady={false}
-        />
-      </PhoneFrame>
-      <Hint label={copy.hintEmail} arrow="up" />
-    </div>
-  );
-}
-
-function CheckInPhone({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
-  return (
-    <div className="relative mx-auto flex w-[198px] flex-col items-center sm:w-[210px]">
-      <div className="mb-2 sm:hidden">
-        <Hint label={copy.hintButton} arrow="down" />
-      </div>
-      <PhoneFrame>
-        <AppChrome
-          locale={locale}
-          name={DEMO_NAME}
-          email={DEMO_EMAIL}
-          buttonLabel={t(locale, "checkIn")}
-          buttonReady={true}
-        />
-      </PhoneFrame>
-      <div className="absolute top-[46%] left-[calc(100%+4px)] hidden w-[5.75rem] -translate-y-1/2 text-left sm:block">
-        <div className="flex items-center gap-1 text-[#006039]">
-          <ArrowLeft />
-          <p className="text-[13px] font-medium leading-snug tracking-[-0.02em]">
-            {copy.hintButton}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AlertPhone({ locale }: { locale: Locale }) {
-  return (
-    <PhoneFrame>
-      <AlertScreen locale={locale} />
-    </PhoneFrame>
   );
 }
 
@@ -114,20 +79,16 @@ function Hint({
   arrow: "up" | "down";
 }) {
   return (
-    <div
-      className={`flex max-w-[11.5rem] flex-col items-center text-[#006039] ${
-        arrow === "down" ? "mb-2" : "mt-2"
-      }`}
-    >
+    <div className="flex max-w-[9.5rem] flex-col items-center px-1 text-[#006039]">
       {arrow === "down" ? (
         <>
-          <p className="text-[13px] font-medium leading-snug tracking-[-0.02em]">{label}</p>
+          <p className="text-[9px] font-medium leading-snug tracking-[-0.02em]">{label}</p>
           <ArrowDown />
         </>
       ) : (
         <>
           <ArrowUp />
-          <p className="text-[13px] font-medium leading-snug tracking-[-0.02em]">{label}</p>
+          <p className="text-[9px] font-medium leading-snug tracking-[-0.02em]">{label}</p>
         </>
       )}
     </div>
@@ -136,11 +97,11 @@ function Hint({
 
 function ArrowDown() {
   return (
-    <svg width="18" height="28" viewBox="0 0 18 28" fill="none" aria-hidden="true" className="mt-1">
+    <svg width="14" height="18" viewBox="0 0 14 18" fill="none" aria-hidden="true" className="mt-0.5">
       <path
-        d="M9 2v20M3.5 16.5 9 22l5.5-5.5"
+        d="M7 1.5v12M3 9.5 7 13.5 11 9.5"
         stroke="currentColor"
-        strokeWidth="1.6"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -150,25 +111,11 @@ function ArrowDown() {
 
 function ArrowUp() {
   return (
-    <svg width="18" height="28" viewBox="0 0 18 28" fill="none" aria-hidden="true" className="mb-1">
+    <svg width="14" height="18" viewBox="0 0 14 18" fill="none" aria-hidden="true" className="mb-0.5">
       <path
-        d="M9 26V6M3.5 11.5 9 6l5.5 5.5"
+        d="M7 16.5v-12M3 8.5 7 4.5 11 8.5"
         stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function ArrowLeft() {
-  return (
-    <svg width="28" height="18" viewBox="0 0 28 18" fill="none" aria-hidden="true" className="shrink-0">
-      <path
-        d="M26 9H6M11.5 3.5 6 9l5.5 5.5"
-        stroke="currentColor"
-        strokeWidth="1.6"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -216,16 +163,22 @@ function AppChrome({
   email,
   buttonLabel,
   buttonReady,
+  nameHint,
+  emailHint,
+  buttonHint,
 }: {
   locale: Locale;
   name: string;
   email: string;
   buttonLabel: string;
   buttonReady: boolean;
+  nameHint?: string;
+  emailHint?: string;
+  buttonHint?: string;
 }) {
   return (
-    <div className="flex h-full flex-col px-3 pb-6 pt-9">
-      <div className="flex items-center justify-center">
+    <div className="flex h-full flex-col px-3 pb-7 pt-9">
+      <div className="flex flex-col items-center">
         <p
           className={`truncate text-[11px] tracking-[-0.02em] ${
             name ? "text-stone-800" : "text-stone-400"
@@ -233,10 +186,11 @@ function AppChrome({
         >
           {name || t(locale, "namePlaceholder")}
         </p>
+        {nameHint ? <Hint label={nameHint} arrow="up" /> : null}
       </div>
       <div className="flex flex-1 flex-col items-center justify-center">
         <div
-          className={`relative flex h-[7.25rem] w-[7.25rem] items-center justify-center rounded-full text-[13px] font-medium tracking-[-0.03em] ${
+          className={`relative flex h-[6.6rem] w-[6.6rem] items-center justify-center rounded-full text-[12px] font-medium tracking-[-0.03em] ${
             buttonReady
               ? "bg-[#006039] text-white shadow-[0_12px_28px_rgba(0,96,57,0.32)]"
               : "bg-[#006039]/35 text-white"
@@ -247,14 +201,22 @@ function AppChrome({
           ) : null}
           <span className="relative z-10 px-3 text-center leading-tight">{buttonLabel}</span>
         </div>
+        {buttonHint ? (
+          <div className="mt-2">
+            <Hint label={buttonHint} arrow="up" />
+          </div>
+        ) : null}
       </div>
-      <p
-        className={`truncate text-center text-[10px] tracking-[-0.02em] ${
-          email ? "text-stone-800" : "text-stone-400"
-        }`}
-      >
-        {email || t(locale, "emailPlaceholder")}
-      </p>
+      <div className="flex flex-col items-center">
+        {emailHint ? <Hint label={emailHint} arrow="down" /> : null}
+        <p
+          className={`truncate text-center text-[10px] tracking-[-0.02em] ${
+            email ? "text-stone-800" : "text-stone-400"
+          }`}
+        >
+          {email || t(locale, "emailPlaceholder")}
+        </p>
+      </div>
     </div>
   );
 }
