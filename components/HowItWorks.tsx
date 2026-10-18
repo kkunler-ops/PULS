@@ -16,26 +16,163 @@ export function HowItWorks({ copy, locale }: { copy: SiteCopy; locale: Locale })
   ];
 
   return (
-    <ol className="mt-12 grid gap-12 sm:mt-16 sm:grid-cols-3 sm:gap-8 lg:gap-10">
-      {steps.map((step, index) => (
-        <li key={step.screen} className="flex flex-col items-center text-center">
-          <PhoneFrame>
-            {step.screen === "setup" ? <SetupScreen locale={locale} /> : null}
-            {step.screen === "checkin" ? <CheckInScreen locale={locale} /> : null}
-            {step.screen === "alert" ? <AlertScreen locale={locale} /> : null}
-          </PhoneFrame>
-          <p className="mt-6 text-sm font-medium tracking-[0.16em] text-[#006039]">
-            {String(index + 1).padStart(2, "0")}
+    <div className="mt-16 sm:mt-20">
+      <h2 className="text-[1.85rem] font-medium leading-[1.15] tracking-[-0.04em] text-stone-800 sm:text-4xl">
+        {copy.howItWorks}
+      </h2>
+      <ol className="mt-12 grid gap-14 sm:mt-16 sm:grid-cols-3 sm:gap-8 lg:gap-10">
+        {steps.map((step, index) => (
+          <li
+            key={step.screen}
+            className={`flex flex-col items-center text-center ${
+              step.screen === "checkin" ? "sm:pr-14" : ""
+            }`}
+          >
+            <p className="text-sm font-medium tracking-[0.16em] text-[#006039]">
+              {String(index + 1).padStart(2, "0")}
+            </p>
+            <h3 className="mt-3 text-xl font-medium tracking-[-0.03em] text-stone-800">
+              {step.title}
+            </h3>
+            <p className="mt-2 max-w-xs text-[15px] leading-relaxed text-stone-600 sm:text-base">
+              {step.body}
+            </p>
+            <div className="mt-8">
+              {step.screen === "setup" ? (
+                <SetupPhone copy={copy} locale={locale} />
+              ) : null}
+              {step.screen === "checkin" ? (
+                <CheckInPhone copy={copy} locale={locale} />
+              ) : null}
+              {step.screen === "alert" ? <AlertPhone locale={locale} /> : null}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function SetupPhone({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
+  return (
+    <div className="flex flex-col items-center">
+      <Hint label={copy.hintName} arrow="down" />
+      <PhoneFrame>
+        <AppChrome
+          locale={locale}
+          name=""
+          email=""
+          buttonLabel={t(locale, "checkIn")}
+          buttonReady={false}
+        />
+      </PhoneFrame>
+      <Hint label={copy.hintEmail} arrow="up" />
+    </div>
+  );
+}
+
+function CheckInPhone({ copy, locale }: { copy: SiteCopy; locale: Locale }) {
+  return (
+    <div className="relative mx-auto flex w-[198px] flex-col items-center sm:w-[210px]">
+      <div className="mb-2 sm:hidden">
+        <Hint label={copy.hintButton} arrow="down" />
+      </div>
+      <PhoneFrame>
+        <AppChrome
+          locale={locale}
+          name={DEMO_NAME}
+          email={DEMO_EMAIL}
+          buttonLabel={t(locale, "checkIn")}
+          buttonReady={true}
+        />
+      </PhoneFrame>
+      <div className="absolute top-[46%] left-[calc(100%+4px)] hidden w-[5.75rem] -translate-y-1/2 text-left sm:block">
+        <div className="flex items-center gap-1 text-[#006039]">
+          <ArrowLeft />
+          <p className="text-[13px] font-medium leading-snug tracking-[-0.02em]">
+            {copy.hintButton}
           </p>
-          <h3 className="mt-3 text-xl font-medium tracking-[-0.03em] text-stone-800">
-            {step.title}
-          </h3>
-          <p className="mt-2 max-w-xs text-[15px] leading-relaxed text-stone-600 sm:text-base">
-            {step.body}
-          </p>
-        </li>
-      ))}
-    </ol>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AlertPhone({ locale }: { locale: Locale }) {
+  return (
+    <PhoneFrame>
+      <AlertScreen locale={locale} />
+    </PhoneFrame>
+  );
+}
+
+function Hint({
+  label,
+  arrow,
+}: {
+  label: string;
+  arrow: "up" | "down";
+}) {
+  return (
+    <div
+      className={`flex max-w-[11.5rem] flex-col items-center text-[#006039] ${
+        arrow === "down" ? "mb-2" : "mt-2"
+      }`}
+    >
+      {arrow === "down" ? (
+        <>
+          <p className="text-[13px] font-medium leading-snug tracking-[-0.02em]">{label}</p>
+          <ArrowDown />
+        </>
+      ) : (
+        <>
+          <ArrowUp />
+          <p className="text-[13px] font-medium leading-snug tracking-[-0.02em]">{label}</p>
+        </>
+      )}
+    </div>
+  );
+}
+
+function ArrowDown() {
+  return (
+    <svg width="18" height="28" viewBox="0 0 18 28" fill="none" aria-hidden="true" className="mt-1">
+      <path
+        d="M9 2v20M3.5 16.5 9 22l5.5-5.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ArrowUp() {
+  return (
+    <svg width="18" height="28" viewBox="0 0 18 28" fill="none" aria-hidden="true" className="mb-1">
+      <path
+        d="M9 26V6M3.5 11.5 9 6l5.5 5.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ArrowLeft() {
+  return (
+    <svg width="28" height="18" viewBox="0 0 28 18" fill="none" aria-hidden="true" className="shrink-0">
+      <path
+        d="M26 9H6M11.5 3.5 6 9l5.5 5.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 
@@ -50,32 +187,6 @@ function PhoneFrame({ children }: { children: React.ReactNode }) {
         </div>
       </div>
     </div>
-  );
-}
-
-function SetupScreen({ locale }: { locale: Locale }) {
-  return (
-    <AppChrome
-      locale={locale}
-      name=""
-      email=""
-      buttonLabel={t(locale, "checkIn")}
-      buttonDone={false}
-      buttonReady={false}
-    />
-  );
-}
-
-function CheckInScreen({ locale }: { locale: Locale }) {
-  return (
-    <AppChrome
-      locale={locale}
-      name={DEMO_NAME}
-      email={DEMO_EMAIL}
-      buttonLabel={t(locale, "checkIn")}
-      buttonDone={false}
-      buttonReady={true}
-    />
   );
 }
 
@@ -104,14 +215,12 @@ function AppChrome({
   name,
   email,
   buttonLabel,
-  buttonDone,
   buttonReady,
 }: {
   locale: Locale;
   name: string;
   email: string;
   buttonLabel: string;
-  buttonDone: boolean;
   buttonReady: boolean;
 }) {
   return (
@@ -128,11 +237,9 @@ function AppChrome({
       <div className="flex flex-1 flex-col items-center justify-center">
         <div
           className={`relative flex h-[7.25rem] w-[7.25rem] items-center justify-center rounded-full text-[13px] font-medium tracking-[-0.03em] ${
-            buttonDone
-              ? "bg-[#d5e3da] text-[#006039]"
-              : buttonReady
-                ? "bg-[#006039] text-white shadow-[0_12px_28px_rgba(0,96,57,0.32)]"
-                : "bg-[#006039]/35 text-white"
+            buttonReady
+              ? "bg-[#006039] text-white shadow-[0_12px_28px_rgba(0,96,57,0.32)]"
+              : "bg-[#006039]/35 text-white"
           }`}
         >
           {buttonReady ? (

@@ -18,6 +18,10 @@ export type SiteCopy = {
   solution: string;
   solutionHeadline: string;
   solutionBody: string;
+  howItWorks: string;
+  hintName: string;
+  hintEmail: string;
+  hintButton: string;
   step1Title: string;
   step1Body: string;
   step2Title: string;
@@ -48,6 +52,10 @@ export const siteCopy: Record<SiteLocale, SiteCopy> = {
     solutionHeadline: "One check-in a day, so someone knows you are okay.",
     solutionBody:
       "You add an emergency contact and tap the check-in button once a day. That signals you are alive and well. If the button is not pressed two days in a row, PULS notifies your emergency contact automatically.",
+    howItWorks: "How it works",
+    hintName: "Type your name here",
+    hintEmail: "Add the emergency email here",
+    hintButton: "Tap once a day",
     step1Title: "Add your name and a contact",
     step1Body:
       "Enter your name and the email of someone who should know if you go silent.",
@@ -79,6 +87,10 @@ export const siteCopy: Record<SiteLocale, SiteCopy> = {
       "Ein Check-in am Tag, damit jemand weiß, dass es dir gut geht.",
     solutionBody:
       "Du hinterlegst einen Notfallkontakt und tippst einmal am Tag auf den Check-in-Button. Das zeigt: du lebst und es geht dir gut. Wird der Button zwei Tage hintereinander nicht gedrückt, benachrichtigt PULS automatisch deinen Notfallkontakt.",
+    howItWorks: "So funktioniert’s",
+    hintName: "Hier deinen Namen eintragen",
+    hintEmail: "Hier die Notfall-Mail eintragen",
+    hintButton: "Einmal am Tag tippen",
     step1Title: "Name und Kontakt hinterlegen",
     step1Body:
       "Trag deinen Namen ein und die E-Mail von jemandem, der wissen soll, wenn du still wirst.",
@@ -110,6 +122,10 @@ export const siteCopy: Record<SiteLocale, SiteCopy> = {
       "Un check-in al día, para que alguien sepa que estás bien.",
     solutionBody:
       "Añades un contacto de emergencia y pulsas el botón de check-in una vez al día. Eso indica que estás bien. Si el botón no se pulsa dos días seguidos, PULS avisa automáticamente a tu contacto de emergencia.",
+    howItWorks: "Cómo funciona",
+    hintName: "Escribe tu nombre aquí",
+    hintEmail: "Añade aquí el correo de emergencia",
+    hintButton: "Toca una vez al día",
     step1Title: "Añade tu nombre y un contacto",
     step1Body:
       "Escribe tu nombre y el correo de alguien que deba saber si dejas de dar señales.",
