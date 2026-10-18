@@ -48,8 +48,9 @@ export const siteCopy: Record<SiteLocale, SiteCopy> = {
     solutionHeadline: "One check-in a day, so someone knows you are okay.",
     solutionBody:
       "You add an emergency contact and tap the check-in button once a day. That signals you are alive and well. If the button is not pressed two days in a row, PULS notifies your emergency contact automatically.",
-    step1Title: "Add a contact",
-    step1Body: "Save the email of someone who should know if you go silent.",
+    step1Title: "Add your name and a contact",
+    step1Body:
+      "Enter your name and the email of someone who should know if you go silent.",
     step2Title: "Check in daily",
     step2Body: "Tap the button once a day to show that you are okay.",
     step3Title: "They get notified",
@@ -78,9 +79,9 @@ export const siteCopy: Record<SiteLocale, SiteCopy> = {
       "Ein Check-in am Tag, damit jemand weiß, dass es dir gut geht.",
     solutionBody:
       "Du hinterlegst einen Notfallkontakt und tippst einmal am Tag auf den Check-in-Button. Das zeigt: du lebst und es geht dir gut. Wird der Button zwei Tage hintereinander nicht gedrückt, benachrichtigt PULS automatisch deinen Notfallkontakt.",
-    step1Title: "Kontakt hinterlegen",
+    step1Title: "Name und Kontakt hinterlegen",
     step1Body:
-      "Speichere die E-Mail von jemandem, der wissen soll, wenn du still wirst.",
+      "Trag deinen Namen ein und die E-Mail von jemandem, der wissen soll, wenn du still wirst.",
     step2Title: "Täglich einchecken",
     step2Body: "Tippe einmal am Tag auf den Button, um zu zeigen, dass es dir gut geht.",
     step3Title: "Sie werden benachrichtigt",
@@ -109,9 +110,9 @@ export const siteCopy: Record<SiteLocale, SiteCopy> = {
       "Un check-in al día, para que alguien sepa que estás bien.",
     solutionBody:
       "Añades un contacto de emergencia y pulsas el botón de check-in una vez al día. Eso indica que estás bien. Si el botón no se pulsa dos días seguidos, PULS avisa automáticamente a tu contacto de emergencia.",
-    step1Title: "Añade un contacto",
+    step1Title: "Añade tu nombre y un contacto",
     step1Body:
-      "Guarda el correo de alguien que deba saber si dejas de dar señales.",
+      "Escribe tu nombre y el correo de alguien que deba saber si dejas de dar señales.",
     step2Title: "Haz check-in cada día",
     step2Body: "Pulsa el botón una vez al día para mostrar que estás bien.",
     step3Title: "Reciben aviso",

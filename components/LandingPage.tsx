@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { HowItWorks } from "@/components/HowItWorks";
 import { useSiteLocale } from "@/components/SiteLocale";
 
 const ctaClassName =
   "inline-flex h-14 w-full items-center justify-center rounded-full bg-[#006039] px-8 text-base font-medium text-white shadow-[0_16px_40px_rgba(0,96,57,0.28)] transition hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#006039]/25 sm:w-auto";
 
 export function LandingPage() {
-  const { copy } = useSiteLocale();
+  const { copy, locale } = useSiteLocale();
 
   return (
     <main className="mx-auto max-w-5xl px-6 pb-20 sm:px-10 sm:pb-24 lg:px-16 lg:pb-32">
@@ -57,35 +58,7 @@ export function LandingPage() {
           {copy.solutionBody}
         </p>
 
-        <ol className="mt-12 grid gap-8 sm:mt-16 sm:grid-cols-3 sm:gap-10">
-          <li>
-            <p className="text-sm font-medium tracking-[0.16em] text-[#006039]">01</p>
-            <h3 className="mt-3 text-xl font-medium tracking-[-0.03em] text-stone-800">
-              {copy.step1Title}
-            </h3>
-            <p className="mt-2 text-[15px] leading-relaxed text-stone-600 sm:text-base">
-              {copy.step1Body}
-            </p>
-          </li>
-          <li>
-            <p className="text-sm font-medium tracking-[0.16em] text-[#006039]">02</p>
-            <h3 className="mt-3 text-xl font-medium tracking-[-0.03em] text-stone-800">
-              {copy.step2Title}
-            </h3>
-            <p className="mt-2 text-[15px] leading-relaxed text-stone-600 sm:text-base">
-              {copy.step2Body}
-            </p>
-          </li>
-          <li>
-            <p className="text-sm font-medium tracking-[0.16em] text-[#006039]">03</p>
-            <h3 className="mt-3 text-xl font-medium tracking-[0.03em] text-stone-800">
-              {copy.step3Title}
-            </h3>
-            <p className="mt-2 text-[15px] leading-relaxed text-stone-600 sm:text-base">
-              {copy.step3Body}
-            </p>
-          </li>
-        </ol>
+        <HowItWorks copy={copy} locale={locale} />
       </section>
 
       <section className="mt-20 border-t border-stone-300/70 pt-16 text-center sm:mt-28 sm:pt-20 lg:mt-32">
