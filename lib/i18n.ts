@@ -518,3 +518,8 @@ export function buildAlarmEmail(locale: Locale, name: string) {
     ].join("\n"),
   };
 }
+
+export function buildAlarmSms(locale: Locale, name: string) {
+  const safeName = name.trim() || "PULS";
+  return `PULS: ${t(locale, "emailBody", { name: safeName }).replaceAll("\n", " ")}`;
+}

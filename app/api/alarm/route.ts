@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
-import { buildAlarmEmail, isLocale } from "@/lib/i18n";
+import { buildAlarmEmail, buildAlarmSms, isLocale } from "@/lib/i18n";
+import {
+  cancelScheduledSms,
+  isTwilioConfigured,
+  normalizePhone,
+  scheduleAlarmSms,
+} from "@/lib/sms";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const hits = new Map<string, number[]>();
@@ -41,9 +47,11 @@ type Body = {
   action?: "schedule" | "cancel";
   name?: string;
   email?: string;
+  phone?: string | null;
   locale?: string;
   scheduledAt?: string;
   previousEmailId?: string | null;
+  previousSmsId?: string | null;
 };
 
 export async function POST(request: NextRequest) {
@@ -70,19 +78,31 @@ export async function POST(request: NextRequest) {
     typeof body.previousEmailId === "string" && body.previousEmailId
       ? body.previousEmailId
       : null;
+  const previousSmsId =
+    typeof body.previousSmsId === "string" && body.previousSmsId
+      ? body.previousSmsId
+      : null;
 
   if (previousEmailId) {
     await resend.emails.cancel(previousEmailId);
   }
+  if (previousSmsId) {
+    await cancelScheduledSms(previousSmsId);
+  }
 
   if (body.action === "cancel") {
-    return NextResponse.json({ ok: true, id: null });
+    return NextResponse.json({ ok: true, id: null, smsId: null });
   }
 
   const name = (body.name ?? "").trim();
   const email = (body.email ?? "").trim();
   const locale = body.locale;
   const scheduledAt = body.scheduledAt;
+  const { phone, invalid: invalidPhone } = normalizePhone(body.phone);
+
+  if (invalidPhone) {
+    return NextResponse.json({ error: "invalid_phone" }, { status: 400 });
+  }
 
   if (!name || name.length > 80) {
     return NextResponse.json({ error: "invalid_name" }, { status: 400 });
@@ -128,5 +148,23 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  return NextResponse.json({ ok: true, id: data.id, scheduledAt: sendAt.toISOString() });
+  let smsId: string | null = null;
+  if (phone && isTwilioConfigured()) {
+    try {
+      smsId = await scheduleAlarmSms({
+        to: phone,
+        body: buildAlarmSms(locale, name),
+        sendAt,
+      });
+    } catch {
+      smsId = null;
+    }
+  }
+
+  return NextResponse.json({
+    ok: true,
+    id: data.id,
+    smsId,
+    scheduledAt: sendAt.toISOString(),
+  });
 }

@@ -3,9 +3,15 @@ export async function syncAlarm(input: {
   name: string;
   email: string;
   locale: string;
+  phone?: string | null;
   scheduledAt?: string;
   previousEmailId?: string | null;
-}): Promise<{ id: string | null; error?: "not_configured" | "failed" }> {
+  previousSmsId?: string | null;
+}): Promise<{
+  id: string | null;
+  smsId: string | null;
+  error?: "not_configured" | "failed";
+}> {
   const response = await fetch("/api/alarm", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -13,13 +19,16 @@ export async function syncAlarm(input: {
   });
 
   if (response.status === 503) {
-    return { id: null, error: "not_configured" };
+    return { id: null, smsId: null, error: "not_configured" };
   }
 
   if (!response.ok) {
-    return { id: null, error: "failed" };
+    return { id: null, smsId: null, error: "failed" };
   }
 
-  const data = (await response.json()) as { id?: string | null };
-  return { id: data.id ?? null };
+  const data = (await response.json()) as {
+    id?: string | null;
+    smsId?: string | null;
+  };
+  return { id: data.id ?? null, smsId: data.smsId ?? null };
 }
