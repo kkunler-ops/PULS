@@ -40,22 +40,18 @@ function digits(value: string) {
 
 async function findFromNumber() {
   const from = process.env.TWILIO_FROM_NUMBER;
-  if (!from) {
-    throw new Error("TWILIO_FROM_NUMBER is missing");
-  }
+  if (!from) return null;
 
   const numbers = await client().incomingPhoneNumbers.list({ limit: 50 });
-  const match = numbers.find((item) => digits(item.phoneNumber) === digits(from));
-  if (!match) {
-    throw new Error(`Twilio sender ${from} was not found on this account`);
-  }
-  return match;
+  return numbers.find((item) => digits(item.phoneNumber) === digits(from)) ?? null;
+}
+
+async function listServiceSenders(serviceSid: string) {
+  return client().messaging.v1.services(serviceSid).phoneNumbers.list({ limit: 20 });
 }
 
 async function serviceHasSender(serviceSid: string, phoneNumberSid: string) {
-  const pool = await client().messaging.v1.services(serviceSid).phoneNumbers.list({
-    limit: 20,
-  });
+  const pool = await listServiceSenders(serviceSid);
   return pool.some((item) => item.sid === phoneNumberSid);
 }
 
@@ -70,44 +66,62 @@ async function addSenderToService(serviceSid: string, phoneNumberSid: string) {
   }
 }
 
-async function findServiceWithSender(phoneNumberSid: string) {
-  const services = await client().messaging.v1.services.list({ limit: 50 });
-  for (const service of services) {
-    if (await serviceHasSender(service.sid, phoneNumberSid)) {
-      return service.sid;
-    }
-  }
-  return null;
-}
-
-async function resolveMessagingServiceSid() {
+async function resolveMessagingServiceSid(fromNumberSid: string | null) {
   if (process.env.TWILIO_MESSAGING_SERVICE_SID) {
     const sid = process.env.TWILIO_MESSAGING_SERVICE_SID;
+    if (fromNumberSid) await addSenderToService(sid, fromNumberSid);
     cachedServiceSid = sid;
-    const sender = await findFromNumber();
-    await addSenderToService(sid, sender.sid);
     return sid;
   }
 
   if (cachedServiceSid) return cachedServiceSid;
 
-  const sender = await findFromNumber();
-  const existing = await findServiceWithSender(sender.sid);
-  if (existing) {
-    cachedServiceSid = existing;
-    return existing;
+  const from = process.env.TWILIO_FROM_NUMBER;
+  const services = await client().messaging.v1.services.list({ limit: 50 });
+  const pools = await Promise.all(
+    services.map(async (service) => ({
+      sid: service.sid,
+      name: service.friendlyName,
+      senders: await listServiceSenders(service.sid),
+    })),
+  );
+
+  const matchingFrom = from
+    ? pools.find((pool) =>
+        pool.senders.some((sender) => digits(sender.phoneNumber) === digits(from)),
+      )
+    : null;
+  if (matchingFrom) {
+    cachedServiceSid = matchingFrom.sid;
+    return matchingFrom.sid;
   }
 
-  const twilioClient = client();
-  const services = await twilioClient.messaging.v1.services.list({ limit: 50 });
+  if (fromNumberSid) {
+    const existing = pools.find((pool) =>
+      pool.senders.some((sender) => sender.sid === fromNumberSid),
+    );
+    if (existing) {
+      cachedServiceSid = existing.sid;
+      return existing.sid;
+    }
+  }
+
+  const withAnySender = pools.find((pool) => pool.senders.length > 0);
+  if (withAnySender && !fromNumberSid) {
+    cachedServiceSid = withAnySender.sid;
+    return withAnySender.sid;
+  }
+
   let service = services.find((item) => item.friendlyName === SERVICE_NAME);
   if (!service) {
-    service = await twilioClient.messaging.v1.services.create({
+    service = await client().messaging.v1.services.create({
       friendlyName: SERVICE_NAME,
     });
   }
+  if (fromNumberSid) {
+    await addSenderToService(service.sid, fromNumberSid);
+  }
 
-  await addSenderToService(service.sid, sender.sid);
   cachedServiceSid = service.sid;
   return service.sid;
 }
@@ -126,11 +140,13 @@ async function createScheduledMessage(input: {
   body: string;
   sendAt: Date;
   messagingServiceSid: string;
+  from?: string;
 }) {
   return client().messages.create({
     to: input.to,
     body: input.body,
     messagingServiceSid: input.messagingServiceSid,
+    ...(input.from ? { from: input.from } : {}),
     scheduleType: "fixed",
     sendAt: input.sendAt,
   });
@@ -145,22 +161,33 @@ export async function scheduleAlarmSms(input: {
     throw new Error("twilio_not_configured");
   }
 
-  const messagingServiceSid = await resolveMessagingServiceSid();
+  const from = process.env.TWILIO_FROM_NUMBER;
+  const ownedNumber = await findFromNumber();
+  const messagingServiceSid = await resolveMessagingServiceSid(ownedNumber?.sid ?? null);
   const bodies = [input.body, ...TRIAL_BODIES];
   let lastError: unknown;
 
   for (const body of bodies) {
-    try {
-      const message = await createScheduledMessage({
-        to: input.to,
-        body,
-        sendAt: input.sendAt,
-        messagingServiceSid,
-      });
-      if (!message.sid) throw new Error("Twilio returned no message SID");
-      return message.sid;
-    } catch (error) {
-      lastError = error;
+    const attempts = from
+      ? [
+          { body, from },
+          { body },
+        ]
+      : [{ body }];
+
+    for (const attempt of attempts) {
+      try {
+        const message = await createScheduledMessage({
+          to: input.to,
+          sendAt: input.sendAt,
+          messagingServiceSid,
+          ...attempt,
+        });
+        if (!message.sid) throw new Error("Twilio returned no message SID");
+        return message.sid;
+      } catch (error) {
+        lastError = error;
+      }
     }
   }
 
