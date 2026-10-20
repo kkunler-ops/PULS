@@ -6,6 +6,7 @@ import {
   isTwilioConfigured,
   normalizePhone,
   scheduleAlarmSms,
+  twilioErrorMessage,
 } from "@/lib/sms";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -149,15 +150,21 @@ export async function POST(request: NextRequest) {
   }
 
   let smsId: string | null = null;
-  if (phone && isTwilioConfigured()) {
-    try {
-      smsId = await scheduleAlarmSms({
-        to: phone,
-        body: buildAlarmSms(locale, name),
-        sendAt,
-      });
-    } catch {
-      smsId = null;
+  let smsError: string | null = null;
+  if (phone) {
+    if (!isTwilioConfigured()) {
+      smsError = "twilio_not_configured";
+    } else {
+      try {
+        smsId = await scheduleAlarmSms({
+          to: phone,
+          body: buildAlarmSms(locale, name),
+          sendAt,
+        });
+      } catch (error) {
+        smsError = twilioErrorMessage(error);
+        console.error("[puls alarm sms]", smsError);
+      }
     }
   }
 
@@ -165,6 +172,7 @@ export async function POST(request: NextRequest) {
     ok: true,
     id: data.id,
     smsId,
+    smsError,
     scheduledAt: sendAt.toISOString(),
   });
 }
