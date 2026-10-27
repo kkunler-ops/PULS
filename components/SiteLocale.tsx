@@ -10,13 +10,14 @@ import {
   useSyncExternalStore,
 } from "react";
 import type { Locale } from "@/lib/i18n";
-import { loadState, saveLocale } from "@/lib/storage";
 import {
+  isSiteLocale,
   siteCopy,
-  toSiteLocale,
   type SiteCopy,
   type SiteLocale,
 } from "@/lib/site-i18n";
+
+const SITE_LOCALE_KEY = "puls.site.locale";
 
 type SiteLocaleContextValue = {
   locale: SiteLocale;
@@ -34,13 +35,32 @@ function useHydrated() {
   );
 }
 
+function loadSiteLocale(): SiteLocale {
+  if (typeof window === "undefined") return "en";
+  try {
+    const stored = window.localStorage.getItem(SITE_LOCALE_KEY);
+    if (isSiteLocale(stored)) return stored;
+  } catch {
+    // Ignore blocked storage and keep English.
+  }
+  return "en";
+}
+
+function persistSiteLocale(locale: SiteLocale) {
+  try {
+    window.localStorage.setItem(SITE_LOCALE_KEY, locale);
+  } catch {
+    // Ignore blocked storage.
+  }
+}
+
 export function SiteLocaleProvider({ children }: { children: React.ReactNode }) {
   const hydrated = useHydrated();
   const [locale, setLocaleState] = useState<SiteLocale>("en");
   const [didLoad, setDidLoad] = useState(false);
 
   if (hydrated && !didLoad) {
-    setLocaleState(toSiteLocale(loadState().locale));
+    setLocaleState(loadSiteLocale());
     setDidLoad(true);
   }
 
@@ -50,7 +70,7 @@ export function SiteLocaleProvider({ children }: { children: React.ReactNode }) 
 
   const setLocale = useCallback((next: SiteLocale) => {
     setLocaleState(next);
-    saveLocale(next);
+    persistSiteLocale(next);
   }, []);
 
   const value = useMemo(
