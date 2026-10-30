@@ -56,7 +56,7 @@ export default async function IosPage() {
             </a>
             <script
               dangerouslySetInnerHTML={{
-                __html: `document.getElementById("ios-store").addEventListener("click",function(e){e.preventDefault();window.open(${JSON.stringify(href)},"_blank");});`,
+                __html: `document.getElementById("ios-store").addEventListener("click",function(e){e.preventDefault();window.open(${JSON.stringify(href)},"_self");});`,
               }}
             />
           </>
