@@ -14,7 +14,7 @@ const INSTAGRAM_URL = `instagram://extbrowser/?url=${encodeURIComponent(STORE_UR
 const FACEBOOK_URL = STORE_URL.replace("https://", "x-safari-https://");
 
 const buttonClassName =
-  "inline-flex h-14 w-full max-w-xs items-center justify-center rounded-full bg-[#006039] px-8 text-base font-medium text-white shadow-[0_16px_40px_rgba(0,96,57,0.28)] sm:w-auto";
+  "inline-flex h-14 w-full max-w-xs cursor-pointer appearance-none items-center justify-center rounded-full border-0 bg-[#006039] px-8 text-base font-medium text-white shadow-[0_16px_40px_rgba(0,96,57,0.28)] sm:w-auto";
 
 function targetFromUserAgent(userAgent: string) {
   if (userAgent.includes("Instagram") || userAgent.includes("Threads")) {
@@ -51,12 +51,12 @@ export default async function IosPage() {
       <main className="flex min-h-dvh items-center justify-center bg-[#f3eee7] px-6">
         {target === "facebook" ? (
           <>
-            <a id="ios-store" href={href} className={buttonClassName}>
+            <button type="button" id="ios-store" className={buttonClassName}>
               Im App Store öffnen
-            </a>
+            </button>
             <script
               dangerouslySetInnerHTML={{
-                __html: `document.getElementById("ios-store").addEventListener("click",function(e){e.preventDefault();window.open(${JSON.stringify(href)},"_self");});`,
+                __html: `(function(){var btn=document.getElementById("ios-store");if(!btn)return;var safari=${JSON.stringify(FACEBOOK_URL)};var store=${JSON.stringify(STORE_URL)};btn.addEventListener("click",function(){var left=false;function gone(){left=true;}document.addEventListener("visibilitychange",gone);window.addEventListener("pagehide",gone);var frame=document.createElement("iframe");frame.setAttribute("hidden","");frame.style.cssText="position:absolute;width:0;height:0;border:0";frame.src=safari;document.body.appendChild(frame);setTimeout(function(){if(!left&&!document.hidden)window.location.href=store;},1000);});})();`,
               }}
             />
           </>
