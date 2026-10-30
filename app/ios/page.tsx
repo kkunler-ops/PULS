@@ -49,9 +49,22 @@ export default async function IosPage() {
         <meta httpEquiv="refresh" content={`0;url=${refreshUrl}`} />
       ) : null}
       <main className="flex min-h-dvh items-center justify-center bg-[#f3eee7] px-6">
-        <a href={href} className={buttonClassName}>
-          Im App Store öffnen
-        </a>
+        {target === "facebook" ? (
+          <>
+            <a id="ios-store" href={href} className={buttonClassName}>
+              Im App Store öffnen
+            </a>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `document.getElementById("ios-store").addEventListener("click",function(e){e.preventDefault();window.open(${JSON.stringify(href)},"_blank");});`,
+              }}
+            />
+          </>
+        ) : (
+          <a href={href} className={buttonClassName}>
+            Im App Store öffnen
+          </a>
+        )}
       </main>
     </>
   );
