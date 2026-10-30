@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { HowItWorks } from "@/components/HowItWorks";
 import { useSiteLocale } from "@/components/SiteLocale";
+import { APP_STORE_URL } from "@/lib/app-store";
 
 const ctaClassName =
   "inline-flex h-14 w-full items-center justify-center rounded-full bg-[#006039] px-8 text-base font-medium text-white shadow-[0_16px_40px_rgba(0,96,57,0.28)] transition hover:scale-[1.02] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-[#006039]/25 sm:w-auto";
@@ -69,9 +69,9 @@ export function LandingPage() {
           {copy.ctaBody}
         </p>
         <div className="mt-8 flex justify-center sm:mt-10">
-          <Link href="/app" className={ctaClassName}>
-            {copy.openTheApp}
-          </Link>
+          <a href={APP_STORE_URL} className={ctaClassName}>
+            {copy.ctaButton}
+          </a>
         </div>
       </section>
     </main>

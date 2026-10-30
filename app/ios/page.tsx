@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { APP_STORE_URL } from "@/lib/app-store";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   description: "Open PULS in the App Store.",
 };
 
-const STORE_URL = "https://apps.apple.com/app/puls-alive/id6826094421";
+const STORE_URL = APP_STORE_URL;
 const INSTAGRAM_URL = `instagram://extbrowser/?url=${encodeURIComponent(STORE_URL)}`;
 
 const buttonClassName =

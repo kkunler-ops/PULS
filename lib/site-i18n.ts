@@ -30,6 +30,7 @@ export type SiteCopy = {
   step3Body: string;
   ctaHeadline: string;
   ctaBody: string;
+  ctaButton: string;
 };
 
 export const siteCopy: Record<SiteLocale, SiteCopy> = {
@@ -66,6 +67,7 @@ export const siteCopy: Record<SiteLocale, SiteCopy> = {
       "Miss two days in a row, and your emergency contact is informed automatically.",
     ctaHeadline: "Start your daily check-in.",
     ctaBody: "No account. Everything stays on your device.",
+    ctaButton: "Get the app",
   },
   de: {
     language: "Sprache",
@@ -101,6 +103,7 @@ export const siteCopy: Record<SiteLocale, SiteCopy> = {
       "Zwei Tage ohne Check-in, und dein Notfallkontakt wird automatisch informiert.",
     ctaHeadline: "Starte deinen täglichen Check-in.",
     ctaBody: "Kein Konto. Alles bleibt auf deinem Gerät.",
+    ctaButton: "App laden",
   },
   es: {
     language: "Idioma",
@@ -136,6 +139,7 @@ export const siteCopy: Record<SiteLocale, SiteCopy> = {
       "Si faltas dos días seguidos, tu contacto de emergencia recibe aviso automáticamente.",
     ctaHeadline: "Empieza tu check-in diario.",
     ctaBody: "Sin cuenta. Todo se queda en tu dispositivo.",
+    ctaButton: "Descargar la app",
   },
 };
 
